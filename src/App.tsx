@@ -4,6 +4,7 @@ import { ProtectedRoute } from './routes/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
+import AccountPage from './pages/AccountPage';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/account" element={<AccountPage />} />
         </Routes>
       </Router>
     </AuthProvider>
