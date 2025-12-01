@@ -1,6 +1,5 @@
-
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function NavbarDefault() {
   const { logout } = useAuth();
@@ -9,10 +8,6 @@ export function NavbarDefault() {
   const handleLogout = () => {
     logout();
     navigate('/');
-  };
-
-  const handleAccount = () => {
-    navigate('/account');
   };
 
   return (
@@ -25,10 +20,9 @@ export function NavbarDefault() {
         </button>
 
         <button
-          onClick={handleAccount}
           className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded"
         >
-          Account
+          <Link to="/account" >Account</Link>
         </button>
       </div>
 
