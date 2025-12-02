@@ -21,6 +21,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export const registerUser = async (user: Omit<User, 'uuid'>): Promise<User> => {
+  const response = await api.post('/users', user);
+  return response.data;
+};
+
 export const getUserByUsername = async (username: string): Promise<User> => {
   const response = await api.get('/users/by-username', { params: { username } });
   return response.data;
