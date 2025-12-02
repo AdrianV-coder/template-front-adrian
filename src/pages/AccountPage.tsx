@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getPostsByUsername, deletePost } from '../services/apiService';
 import type { Post } from '../types/post.type'
@@ -47,6 +48,10 @@ function AccountPage() {
           <div className="flex gap-3 justify-center items-center">
             <button className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded">
               Crear Post
+            </button>
+
+            <button className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded">
+              <Link to="/home">Return</Link>
             </button>
           </div>
         </nav>
