@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavbarDefault } from '../components/NavbarDefault';
+import { Header } from '../components/Header';
 import { getPosts } from '../services/apiService';
-import type { Post } from '../types/post.type'
+import type { Post } from '../types/post.type';
 
 function HomePage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -21,9 +22,7 @@ function HomePage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="bg-teal-400 py-5">
-        <h1 className="text-center text-4xl font-black">Red social de Post</h1>
-      </header>
+      <Header />
       <main className="flex flex-col flex-1">
         <NavbarDefault />
 
@@ -34,7 +33,9 @@ function HomePage() {
               <p>{post.body}</p>
 
               <div className="flex gap-3 justify-center items-center">
-                <button className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded text-white mt-2">
+                <button
+                  className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded text-white mt-2"
+                >
                   Crear Comentario
                 </button>
               </div>

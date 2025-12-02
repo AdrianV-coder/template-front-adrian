@@ -18,12 +18,12 @@ function RegisterPage() {
       const newUser = await registerUser({ username, email, password });
       console.log('Usuario registrado:', newUser);
 
-      login(username);
+      login({ id: newUser.id, username: newUser.username });
       navigate('/');
     } catch (error) {
       console.error('Error al registrar usuario:', error);
       alert('No se pudo registrar el usuario');
-    }
+   }
   };
 
   return (

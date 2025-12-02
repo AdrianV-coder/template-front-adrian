@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getPostsByUsername, deletePost } from '../services/apiService';
-import type { Post } from '../types/post.type'
+import type { Post } from '../types/post.type';
+import { Header } from '../components/Header';
 
 function AccountPage() {
   const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       if (!user) return;
 
       try {
-        const data = await getPostsByUsername(user);
+        const data = await getPostsByUsername(user.username);
         setPosts(data);
       } catch (error) {
         console.error(error);
@@ -38,15 +40,16 @@ function AccountPage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="bg-teal-400 py-5">
-        <h1 className="text-center text-4xl font-black">Red social de Post</h1>
-      </header>
+      <Header />
       <div className="p-6">
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
-          <h2 className="text-xl font-bold">Posts de {user}</h2>
+          <h2 className="text-xl font-bold">Posts de {user.username}</h2>
 
           <div className="flex gap-3 justify-center items-center">
-            <button className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded">
+            <button
+              onClick={() => navigate('/create-post')}
+              className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded"
+            >
               Crear Post
             </button>
 

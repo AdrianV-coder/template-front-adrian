@@ -17,7 +17,9 @@ function LoginPage() {
       const userData = await getUserByUsername(username);
 
       if (userData && userData.username === username) {
-        login(username);
+        console.log('Datos del usuario:', userData);
+
+        login(userData);
         navigate('/home');
       } else {
         alert('Usuario no encontrado');

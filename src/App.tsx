@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AccountPage from './pages/AccountPage';
+import CreatePostPage from './pages/CreatePostPage';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             }
           />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/create-post" element={<CreatePostPage />} />
         </Routes>
       </Router>
     </AuthProvider>
