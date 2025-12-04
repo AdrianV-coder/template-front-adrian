@@ -4,25 +4,23 @@ import type { User } from '../types/user.type'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:20001';
 
-const ENV_TOKEN = import.meta.env.VITE_TOKEN as string | undefined;
+const ENV_TOKEN = (import.meta.env.VITE_TOKEN as string | undefined)?.trim();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    ...(ENV_TOKEN ? { Authorization: `Bearer ${ENV_TOKEN}` } : {}),
   },
 });
 
-// Interceptor: añade el token de .env en cada request y así no tienes que estar repitiendolo todo el rato
-api.interceptors.request.use((config) => {
-  if (ENV_TOKEN) {
-    config.headers.Authorization = `Bearer ${ENV_TOKEN}`;
-  }
-  return config;
-});
-
-export const registerUser = async (user: Omit<User, 'uuid'>): Promise<User> => {
+export const registerUser = async (user: Omit<User, 'id'>): Promise<User> => {
   const response = await api.post('/users', user);
+  return response.data;
+};
+
+export const createPost = async (post: Omit<Post, 'id'>): Promise<Post> => {
+  const response = await api.post('/posts', post);
   return response.data;
 };
 
@@ -43,4 +41,25 @@ export const getPostsByUsername = async (username: string): Promise<Post[]> => {
 
 export const deletePost = async (id: string): Promise<void> => {
   await api.delete(`/posts/${id}`);
+};
+
+export const createComment = async (comment: {
+  userId: string;
+  postId: string;
+  name: string;
+  email: string;
+  body: string;
+}): Promise<void> => {
+  const response = await api.post('/comments', comment);
+  return response.data;
+};
+
+export const getCommentsByPostId = async (postId: string): Promise<Comment[]> => {
+  const response = await api.get(`/comments/post/${postId}`);
+  return response.data;
+};
+
+export const getPostById = async (id: string): Promise<Post> => {
+  const response = await api.get(`/posts/${id}`);
+  return response.data;
 };
