@@ -1,5 +1,6 @@
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { PlusIcon, UserIcon, ArrowRightOnRectangleIcon, ChartBarIcon  } from '@heroicons/react/24/outline';
 
 export function NavbarDefault() {
   const { logout } = useAuth();
@@ -11,28 +12,40 @@ export function NavbarDefault() {
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
-      <h2 className="text-xl font-bold">Mi Red Social</h2>
+    <nav className="bg-gray-800 text-white px-6 py-4 flex justify-between items-center shadow-md">
+      <h2 className="text-xl font-bold hover:text-teal-400 transition">Mi Red Social</h2>
 
-      <div className="flex gap-3 justify-center items-center">
-        <button
-          onClick={() => navigate('/create-post')}
-          className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded"
+      <div className="flex gap-4 items-center">
+        <Link
+          to="/create-post"
+          className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
+          <PlusIcon className="h-5 w-5" />
           Crear Post
-        </button>
+        </Link>
 
-        <button
-          className="bg-teal-400 hover:bg-teal-600 px-4 py-2 rounded"
+        <Link
+          to="/create-post"
+          className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
-          <Link to="/account" >Account</Link>
-        </button>
+          <ChartBarIcon className="h-5 w-5" />
+          Statistics
+        </Link>
+
+        <Link
+          to="/account"
+          className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
+        >
+          <UserIcon className="h-5 w-5" />
+          Account
+        </Link>
       </div>
 
       <button
         onClick={handleLogout}
-        className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
+        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
       >
+        <ArrowRightOnRectangleIcon className="h-5 w-5" />
         Cerrar sesión
       </button>
     </nav>

@@ -6,6 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AccountPage from './pages/AccountPage';
 import CreatePostPage from './pages/CreatePostPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 export default function App() {
   return (
@@ -22,6 +23,12 @@ export default function App() {
           />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/create-post" element={<CreatePostPage />} />
+          <Route path="/post/:id" element={
+              <ProtectedRoute>
+                <PostDetailPage />
+              </ProtectedRoute>
+            } 
+          /> 
         </Routes>
       </Router>
     </AuthProvider>
