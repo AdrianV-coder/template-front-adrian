@@ -5,4 +5,5 @@ export type Comment = {
   name: string;
   email: string;
   body: string;
+  createdAt?: string;
 };

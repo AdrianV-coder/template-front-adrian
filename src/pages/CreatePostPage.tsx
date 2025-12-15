@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { createPost } from '../services/apiService';
-import { useAuth } from '../context/AuthContext';
-import { PlusIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
+import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import { useSelector } from 'react-redux';
+import type { RootState } from '../store/index';
 
 function CreatePostPage() {
-  const { user } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [loading, setLoading] = useState(false);
@@ -46,7 +48,7 @@ function CreatePostPage() {
             to="/home"
             className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
           >
-            <ArrowLeftIcon className="h-5 w-5" />
+            <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
             Volver
           </Link>
         </nav>
@@ -83,7 +85,7 @@ function CreatePostPage() {
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
               ) : (
                 <>
-                  <PlusIcon className="h-5 w-5" />
+                  <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
                   Crear Post
                 </>
               )}
