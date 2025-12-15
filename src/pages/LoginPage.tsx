@@ -1,36 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { getUserByUsername } from '../services/apiService';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { loginUser } from '../store/userSlice';
+import { login as authLogin } from '../store/authSlice';
+import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
+import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
-
+  const dispatch = useAppDispatch();
+  const { user, loading, error } = useAppSelector((state) => state.user);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) navigate('/home');
+  }, [user]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-
     try {
-      const userData = await getUserByUsername(username);
+      const authenticatedUser = await dispatch(loginUser(username)).unwrap();
 
-      if (userData && userData.username === username) {
-        login({ id: userData.id, username: userData.username, email: userData.email});
-        navigate('/home');
-      } else {
-        setError('Usuario no encontrado');
-      }
+      dispatch(authLogin(authenticatedUser));
+
+      navigate('/home', { replace: true });
     } catch {
-      setError('Error al iniciar sesión');
-    } finally {
-      setLoading(false);
+      alert('No se pudo iniciar sesión');
     }
   };
 
@@ -49,6 +45,7 @@ function LoginPage() {
           onChange={(e) => setUsername(e.target.value)}
           className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
+
         <input
           type="password"
           placeholder="Contraseña"
@@ -66,7 +63,7 @@ function LoginPage() {
             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
           ) : (
             <>
-              <ArrowRightIcon className="h-5 w-5" />
+              <XVIcon icon={FontAwesomeIconsLibrary.ArrowRight} />
               Iniciar Sesión
             </>
           )}

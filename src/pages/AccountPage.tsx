@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { getPostsByUsername, deletePost } from '../services/apiService';
 import type { Post } from '../types/post.type';
 import { Header } from '../components/Header';
-import { PlusIcon, ArrowLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
-// import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
-// import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
+import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import type { RootState } from '../store/index';
 
 function AccountPage() {
-  const { user } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -48,19 +47,25 @@ function AccountPage() {
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md">
           <h2 className="text-xl font-bold">Posts de {user.username}</h2>
           <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/create-post')}
+            <Link
+              to="/personalStatistics"
               className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
             >
-              <PlusIcon className="h-5 w-5" />
+              <XVIcon icon={FontAwesomeIconsLibrary.ChartLine} />
+              Personal Statistics
+            </Link>
+            <Link
+              to="/create-post"
+              className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
+            >
+              <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
               Crear Post
-            </button>
+            </Link>
             <Link
               to="/home"
               className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
             >
-              {/* <XVIcon icon={FontAwesomeIconsLibrary.Clock} /> */}
-              <ArrowLeftIcon className="h-5 w-5" />
+              <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
               Volver
             </Link>
           </div>
@@ -93,7 +98,7 @@ function AccountPage() {
                   onClick={() => handleDelete(post.id)}
                   className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white mt-4 transition duration-300"
                 >
-                  <TrashIcon className="h-5 w-5" />
+                  <XVIcon icon={FontAwesomeIconsLibrary.TrashRegular} />
                   Eliminar Post
                 </button>
               </li>

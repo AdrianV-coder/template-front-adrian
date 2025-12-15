@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { registerUser } from '../services/apiService';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
+import { registerUser } from "../services/apiService";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const dispatch = useDispatch();
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,10 +22,12 @@ function RegisterPage() {
 
     try {
       const newUser = await registerUser({ username, email, password });
-      login({ id: newUser.id, username: newUser.username });
-      navigate('/');
+
+      dispatch(login({ id: newUser.id, username: newUser.username }));
+
+      navigate("/login", { replace: true });
     } catch {
-      setError('No se pudo registrar el usuario');
+      setError("No se pudo registrar el usuario");
     } finally {
       setLoading(false);
     }
@@ -32,11 +35,18 @@ function RegisterPage() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleRegister} className="bg-white p-8 rounded-xl shadow-lg w-96">
-        <h2 className="text-3xl font-bold text-teal-600 mb-2 text-center">Registro</h2>
+      <form
+        onSubmit={handleRegister}
+        className="bg-white p-8 rounded-xl shadow-lg w-96"
+      >
+        <h2 className="text-3xl font-bold text-teal-600 mb-2 text-center">
+          Registro
+        </h2>
         <p className="text-center mb-6">Crea tu cuenta para comenzar</p>
 
-        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+        {error && (
+          <div className="text-red-500 text-center mb-4">{error}</div>
+        )}
 
         <input
           type="text"
@@ -46,6 +56,7 @@ function RegisterPage() {
           className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
           required
         />
+
         <input
           type="email"
           placeholder="Correo"
@@ -54,6 +65,7 @@ function RegisterPage() {
           className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
           required
         />
+
         <input
           type="password"
           placeholder="Contraseña"
@@ -79,7 +91,7 @@ function RegisterPage() {
         </button>
 
         <p className="text-center mt-4 text-gray-600">
-          ¿Ya tienes cuenta?{' '}
+          ¿Ya tienes cuenta?{" "}
           <Link to="/" className="text-teal-600 hover:underline">
             Inicia sesión
           </Link>

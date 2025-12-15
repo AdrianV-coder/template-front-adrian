@@ -1,14 +1,20 @@
-import { useAuth } from '../context/AuthContext';
+import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { PlusIcon, UserIcon, ArrowRightOnRectangleIcon, ChartBarIcon  } from '@heroicons/react/24/outline';
+import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
+import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import { logout as authLogout } from '../store/authSlice';
+import { logout as userLogout } from '../store/userSlice';
+import type { AppDispatch } from '../store/index';
 
 export function NavbarDefault() {
-  const { logout } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    dispatch(authLogout());
+    dispatch(userLogout());
+    navigate('/', { replace: true });
   };
 
   return (
@@ -20,15 +26,15 @@ export function NavbarDefault() {
           to="/create-post"
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
-          <PlusIcon className="h-5 w-5" />
+          <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
           Crear Post
         </Link>
 
         <Link
-          to="/create-post"
+          to="/statistics"
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
-          <ChartBarIcon className="h-5 w-5" />
+          <XVIcon icon={FontAwesomeIconsLibrary.ChartLine} />
           Statistics
         </Link>
 
@@ -36,7 +42,7 @@ export function NavbarDefault() {
           to="/account"
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
-          <UserIcon className="h-5 w-5" />
+          <XVIcon icon={FontAwesomeIconsLibrary.User} />
           Account
         </Link>
       </div>
@@ -45,7 +51,7 @@ export function NavbarDefault() {
         onClick={handleLogout}
         className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
       >
-        <ArrowRightOnRectangleIcon className="h-5 w-5" />
+        <XVIcon icon={FontAwesomeIconsLibrary.RightFromBracket} />
         Cerrar sesión
       </button>
     </nav>

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 import { createComment } from '../services/apiService';
 import { ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import type { RootState } from '../store/index';
 
 interface CreateCommentProps {
   postId: string;
@@ -9,7 +10,7 @@ interface CreateCommentProps {
 }
 
 function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
-  const { user } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
   const [isActive, setIsActive] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [sending, setSending] = useState(false);

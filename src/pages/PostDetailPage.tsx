@@ -6,13 +6,12 @@ import { getCommentsByPostId } from '../services/apiService';
 import type { Post } from '../types/post.type';
 import type { Comment } from '../types/comment.type';
 import CreateCommentPage from './CreateCommentPage';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-
+import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
+import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
 function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const post = location.state?.post as Post | undefined;
-
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
@@ -45,7 +44,7 @@ function PostDetailPage() {
             to="/home"
             className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded text-white transition duration-300"
           >
-            <ArrowLeftIcon className="h-5 w-5" />
+            <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
             Volver
           </Link>
         </div>
