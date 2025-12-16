@@ -63,10 +63,10 @@ function StatisticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100">
       <Header />
       <main className="p-6">
-        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md">
+        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
           <h2 className="text-xl font-bold">Estadísticas</h2>
           <Link
             to="/home"
@@ -77,18 +77,18 @@ function StatisticsPage() {
           </Link>
         </nav>
 
-        <section className="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg">
+        <section className="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 dark:shadow-none">
           <h2 className="text-2xl font-bold text-teal-600 mb-2">Totales de la plataforma</h2>
-          <p className="text-gray-500 mb-4">Cantidad de posts y comentarios.</p>
+          <p className="text-gray-500 mb-4 dark:text-gray-300">Cantidad de posts y comentarios.</p>
 
           {error && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded">
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
               {error}
             </div>
           )}
 
           {loading ? (
-            <div className="text-gray-600">Cargando estadísticas…</div>
+            <div className="text-gray-600 dark:text-gray-300">Cargando estadísticas…</div>
           ) : (
             <HighchartsReact highcharts={Highcharts} options={totalsOptions} />
           )}

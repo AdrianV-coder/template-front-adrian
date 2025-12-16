@@ -17,9 +17,8 @@ function HomePage() {
       try {
         const data = await getPosts();
         setPosts(data);
-      } catch (err) {
-        setError('Error al obtener los posts');
-        console.error(err);
+      } catch (err: any) {
+        setError(err?.message ?? 'Error al obtener los posts');
       } finally {
         setLoading(false);
       }
@@ -29,9 +28,9 @@ function HomePage() {
   }, [refresh]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-950 dark:text-gray-100">
       <Header />
-      <main className="flex flex-col flex-1">
+      <main className="flex flex-col flex-1 bg-gray-50 dark:bg-gray-950 dark:text-gray-100">
         <NavbarDefault />
 
         <div className="flex-1 p-6">
@@ -42,7 +41,7 @@ function HomePage() {
           )}
 
           {error && (
-            <div className="text-center text-red-500 font-semibold">{error}</div>
+            <div className="text-center font-semibold text-red-600 dark:text-red-400">{error}</div>
           )}
 
           {!loading && !error && (
@@ -50,13 +49,13 @@ function HomePage() {
               {posts.map((post) => (
                 <div
                   key={post.id}
-                  className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition duration-300"
+                  className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 hover:shadow-lg transition duration-300 border border-transparent dark:border-gray-700"
                 >
                   <Link to={`/post/${post.id}`} state={{ post }}>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2 hover:text-teal-600">
+                    <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2 hover:text-teal-600">
                       {post.title}
                     </h3>
-                    <p className="text-gray-700 mb-4">{post.body}</p>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4">{post.body}</p>
                   </Link>
 
                   <CreateCommentPage

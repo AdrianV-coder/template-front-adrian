@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { RootState } from '../store';
 
 interface Props {
@@ -10,5 +10,5 @@ interface Props {
 export const ProtectedRoute: React.FC<Props> = ({ children }) => {
   const isAuthenticated = !!useSelector((s: RootState) => s.auth.user);
   
-  return isAuthenticated ? children : <Navigate to="/" replace />;
+  return isAuthenticated ? children : <Link to="/" replace />;
 };
