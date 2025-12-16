@@ -7,12 +7,14 @@ import { Header } from '../components/Header';
 import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
 import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
 import type { RootState } from '../store/index';
+import { useTranslation } from 'react-i18next';
 
 function AccountPage() {
   const user = useSelector((state: RootState) => state.auth.user);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation(['account', 'common', 'navbar']);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -21,7 +23,7 @@ function AccountPage() {
         const data = await getPostsByUsername(user.username);
         setPosts(data);
       } catch {
-        setError('Error al cargar los posts');
+        setError(t('errorLoadingPosts'));
       } finally {
         setLoading(false);
       }
@@ -34,39 +36,39 @@ function AccountPage() {
       await deletePost(id);
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
     } catch {
-      setError('Error eliminando el post');
+      setError(t('errorDeletingPost'));
     }
   };
 
-  if (!user) return <p className="text-center mt-10 text-red-500">No estás logueado</p>;
+  if (!user) return <p className="text-center mt-10 text-red-500">{t('notLoggedIn')}</p>;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 dark:text-gray-100">
       <Header />
       <div className="p-6">
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
-          <h2 className="text-xl font-bold">Posts de {user.username}</h2>
+          <h2 className="text-xl font-bold">{t('title', { username: user.username })}</h2>
           <div className="flex gap-3">
             <Link
               to="/personalStatistics"
               className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
             >
               <XVIcon icon={FontAwesomeIconsLibrary.ChartLine} />
-              Personal Statistics
+              {t('nav.personalStatistics')}
             </Link>
             <Link
               to="/create-post"
               className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
             >
               <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
-              Crear Post
+              {t('nav.createPost')}
             </Link>
             <Link
               to="/home"
               className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
             >
               <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
-              Volver
+              {t('back', { ns: 'common' })}
             </Link>
           </div>
         </nav>
@@ -80,7 +82,7 @@ function AccountPage() {
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
         {!loading && posts.length === 0 && (
-          <p className="text-center text-gray-600 dark:text-gray-300 mt-6">No tienes posts todavía.</p>
+          <p className="text-center text-gray-600 dark:text-gray-300 mt-6">{t('noPosts')}.</p>
         )}
 
         {!loading && posts.length > 0 && (
@@ -99,7 +101,7 @@ function AccountPage() {
                   className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white mt-4 transition duration-300"
                 >
                   <XVIcon icon={FontAwesomeIconsLibrary.TrashRegular} />
-                  Eliminar Post
+                  {t('deletePost')}
                 </button>
               </li>
             ))}

@@ -3,7 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
 import { registerUser } from "../services/apiService";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
+import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import { useTranslation } from 'react-i18next';
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation('auth');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,76 +30,73 @@ function RegisterPage() {
 
       navigate("/login", { replace: true });
     } catch {
-      setError("No se pudo registrar el usuario");
+      setError(t('register.cannotRegister'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form
-        onSubmit={handleRegister}
-        className="bg-white p-8 rounded-xl shadow-lg w-96"
-      >
-        <h2 className="text-3xl font-bold text-teal-600 mb-2 text-center">
-          Registro
-        </h2>
-        <p className="text-center mb-6">Crea tu cuenta para comenzar</p>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100 flex items-center justify-center p-6">
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h2 className="text-2xl font-bold text-teal-600 mb-1">{t('register.title')}</h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">{t('register.subtitle')}</p>
 
         {error && (
-          <div className="text-red-500 text-center mb-4">{error}</div>
+          <div className="mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
+            {error}
+          </div>
         )}
 
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          required
-        />
+        <form onSubmit={handleRegister}>
+          <input
+            type="text"
+            placeholder={t('register.usernamePlaceholder')}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+            required
+          />
+          <input
+            type="email"
+            placeholder={t('register.emailPlaceholder')}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+            required
+          />
+          <input
+            type="password"
+            placeholder={t('register.passwordPlaceholder')}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border rounded-md p-3 w-full mb-6 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+            required
+          />
 
-        <input
-          type="email"
-          placeholder="Correo"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          required
-        />
+          <button
+            type="submit"
+            className="flex items-center justify-center gap-2 bg-teal-500 text-white w-full py-3 rounded-md hover:bg-teal-600 transition duration-300"
+            disabled={loading}
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
+            ) : (
+              <>
+                <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
+                {t('register.submit')}
+              </>
+            )}
+          </button>
+        </form>
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border rounded-md p-3 w-full mb-6 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          required
-        />
-
-        <button
-          type="submit"
-          className="flex items-center justify-center gap-2 bg-teal-500 text-white w-full py-3 rounded-md hover:bg-teal-600 transition duration-300"
-          disabled={loading}
-        >
-          {loading ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
-          ) : (
-            <>
-              <UserPlusIcon className="h-5 w-5" />
-              Registrarse
-            </>
-          )}
-        </button>
-
-        <p className="text-center mt-4 text-gray-600">
-          ¿Ya tienes cuenta?{" "}
-          <Link to="/" className="text-teal-600 hover:underline">
-            Inicia sesión
+        <div className="mt-4 text-center text-gray-700 dark:text-gray-300">
+          {t('register.haveAccount')}{' '}
+          <Link to="/" className="text-teal-600 hover:text-teal-700 font-medium">
+            {t('register.goLogin')}
           </Link>
-        </p>
-      </form>
+        </div>
+      </div>
     </div>
   );
 }

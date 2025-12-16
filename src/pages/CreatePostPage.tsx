@@ -6,6 +6,7 @@ import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
 import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/index';
+import { useTranslation } from 'react-i18next';
 
 function CreatePostPage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -14,11 +15,12 @@ function CreatePostPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { t } = useTranslation(['posts', 'common']);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
-      setError('Debes iniciar sesión para crear un post');
+      setError(t('mustLogin'));
       return;
     }
 
@@ -32,7 +34,7 @@ function CreatePostPage() {
       setTitle('');
       setBody('');
     } catch {
-      setError('No se pudo crear el post');
+      setError(t('createdFail'));
     } finally {
       setLoading(false);
     }
@@ -43,29 +45,29 @@ function CreatePostPage() {
       <Header />
       <main className="p-6">
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
-          <h2 className="text-xl font-bold">Creación de Posts</h2>
+          <h2 className="text-xl font-bold">{t('navTitle')}</h2>
           <Link
             to="/home"
             className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
           >
             <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
-            Volver
+            {t('back', { ns: 'common' })}
           </Link>
         </nav>
 
         <div className="max-w-lg mx-auto mt-8 bg-white p-8 rounded-xl shadow-lg dark:bg-gray-800 dark:shadow-none">
-          <h2 className="text-3xl font-bold text-teal-600 mb-2 text-center">Crear nuevo post</h2>
+          <h2 className="text-3xl font-bold text-teal-600 mb-2 text-center">{t('cardTitle')}</h2>
           <p className="text-gray-500 text-center mb-6 dark:text-gray-300">
-            Comparte tus ideas con la comunidad
+            {t('cardSubtitle')}
           </p>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          {success && <p className="text-green-500 text-center mb-4">¡Post creado con éxito!</p>}
+          {success && <p className="text-green-500 text-center mb-4">{t('createdOk')}</p>}
 
           <form onSubmit={handleCreate} className="space-y-4">
             <input
               type="text"
-              placeholder="Título"
+              placeholder={t('fieldTitle')}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="
@@ -76,7 +78,7 @@ function CreatePostPage() {
               required
             />
             <textarea
-              placeholder="Contenido"
+              placeholder={t('fieldBody')}
               value={body}
               onChange={(e) => setBody(e.target.value)}
               className="
@@ -98,7 +100,7 @@ function CreatePostPage() {
               ) : (
                 <>
                   <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
-                  Crear Post
+                  {t('submit')}
                 </>
               )}
             </button>

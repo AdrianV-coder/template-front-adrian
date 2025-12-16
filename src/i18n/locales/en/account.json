@@ -1,0 +1,11 @@
+{
+  "title": "{{username}}'s posts",
+  "nav.personalStatistics": "Personal Statistics",
+  "nav.createPost": "Create Post",
+  "nav.back": "Back",
+  "noPosts": "You have no posts yet.",
+  "notLoggedIn": "You are not logged in",
+  "errorLoadingPosts": "Error loading posts",
+  "errorDeletingPost": "Error deleting the post",
+  "deletePost": "Delete Post"
+}

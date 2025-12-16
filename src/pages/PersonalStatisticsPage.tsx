@@ -11,6 +11,7 @@ import type { RootState } from '../store';
 import { getPostsByUsername, getComments } from '../services/apiService';
 import type { Post } from '../types/post.type';
 import type { Comment } from '../types/comment.type';
+import { useTranslation } from 'react-i18next';
 
 function PersonalStatisticsPage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -19,6 +20,7 @@ function PersonalStatisticsPage() {
   const [postsCount, setPostsCount] = useState<number>(0);
   const [commentsReceivedCount, setCommentsReceivedCount] = useState<number>(0);
   const [commentsWrittenCount, setCommentsWrittenCount] = useState<number>(0);
+  const { t } = useTranslation(['personalStatistics', 'common']);
 
   if (typeof HighchartsAccessibility === 'function') {
     HighchartsAccessibility(Highcharts);
@@ -27,7 +29,7 @@ function PersonalStatisticsPage() {
   useEffect(() => {
     const load = async () => {
       if (!user) {
-        setError('No estás logueado');
+        setError(t('errorLoadingStats'));
         setLoading(false);
         return;
       }
@@ -48,26 +50,26 @@ function PersonalStatisticsPage() {
         const written = allComments.filter(c => c.userId === user.id);
         setCommentsWrittenCount(written.length);
       } catch (e: any) {
-        setError(e?.message ?? 'Error cargando estadísticas');
+        setError(e?.message ?? t('errorLoadingStats'));
       } finally {
         setLoading(false);
       }
     };
 
     load();
-  }, [user]);
+  }, [user, t]);
 
   const chartOptions: Highcharts.Options = {
     chart: { type: 'bar' },
-    title: { text: `Actividad personal de ${user?.username ?? ''}` },
-    subtitle: { text: 'Posts propios y comentarios (recibidos vs. escritos)' },
+    title: { text: t('chartTitle', { username: user?.username ?? '' }) },
+    subtitle: { text: t('chartSubtitle') },
     xAxis: {
-      categories: ['Posts', 'Comentarios recibidos', 'Comentarios escritos'],
+      categories: [t('xPosts'), t('xReceived'), t('xWritten')],
       title: { text: undefined },
     },
     yAxis: {
       min: 0,
-      title: { text: 'Cantidad' },
+      title: { text: t('yTitle') },
       allowDecimals: false,
     },
     tooltip: {
@@ -86,7 +88,7 @@ function PersonalStatisticsPage() {
     legend: { enabled: false },
     accessibility: {
       enabled: true,
-      description: 'Gráfico de barras con el recuento de posts del usuario y sus comentarios recibidos y escritos.',
+      description: t('chartDescription'),
     },
   };
 
@@ -95,19 +97,19 @@ function PersonalStatisticsPage() {
       <Header />
       <main className="p-6">
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
-          <h2 className="text-xl font-bold">Estadísticas</h2>
+          <h2 className="text-xl font-bold">{t('title')}</h2>
           <Link
             to="/home"
             className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
           >
             <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
-            Volver
+            {t('back', { ns: 'common' })}
           </Link>
         </nav>
 
         <section className="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg dark:bg-gray-800 dark:shadow-none">
-          <h2 className="text-2xl font-bold text-teal-600 mb-2">Estadísticas personales</h2>
-          <p className="text-gray-500 mb-4 dark:text-gray-300">Cantidad de posts y comentarios de tu cuenta.</p>
+          <h2 className="text-2xl font-bold text-teal-600 mb-2">{t('panelTitle')}</h2>
+          <p className="text-gray-500 mb-4 dark:text-gray-300">{t('panelSubtitle')}</p>
 
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
@@ -116,7 +118,7 @@ function PersonalStatisticsPage() {
           )}
 
           {loading ? (
-            <div className="text-gray-600 dark:text-gray-300">Cargando estadísticas…</div>
+            <div className="text-gray-600 dark:text-gray-300">{t('loadingStats')}</div>
           ) : (
             <HighchartsReact highcharts={Highcharts} options={chartOptions} />
           )}

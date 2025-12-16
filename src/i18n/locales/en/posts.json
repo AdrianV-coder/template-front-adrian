@@ -1,0 +1,11 @@
+{
+  "navTitle": "Posts Creation",
+  "cardTitle": "Create new post",
+  "cardSubtitle": "Share your ideas with the community",
+  "fieldTitle": "Title",
+  "fieldBody": "Content",
+  "submit": "Create Post",
+  "mustLogin": "You must be logged in to create a post",
+  "createdFail": "The post could not be created",
+  "createdOk": "Post created successfully!"
+}
