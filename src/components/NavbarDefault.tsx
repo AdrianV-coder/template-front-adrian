@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
@@ -9,8 +10,22 @@ import type { AppDispatch } from '../store/index';
 export function NavbarDefault() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+      return localStorage.getItem("data-theme") === "dark";
+  });
 
-  
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.setAttribute("data-theme", "dark");
+   
+      localStorage.setItem("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+   
+      localStorage.setItem("data-theme", "light");
+    }
+  }, [isDarkMode]);
+
   const handleLogout = () => {
     dispatch(authLogout());
     dispatch(userLogout());
@@ -47,13 +62,24 @@ export function NavbarDefault() {
         </Link>
       </div>
 
-      <button
-        onClick={handleLogout}
-        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
-      >
-        <XVIcon icon={FontAwesomeIconsLibrary.RightFromBracket} />
-        Cerrar sesión
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => setIsDarkMode(prev => !prev)}
+          className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded transition duration-300"
+          title={isDarkMode ? 'Cambiar a modo día' : 'Cambiar a modo noche'}
+        >
+          <XVIcon icon={isDarkMode ? FontAwesomeIconsLibrary.CircleRegular : FontAwesomeIconsLibrary.LightbulbOn} />
+          {isDarkMode ? 'Noche' : 'Día'}
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
+        >
+          <XVIcon icon={FontAwesomeIconsLibrary.RightFromBracket} />
+          Cerrar sesión
+        </button>
+      </div>
     </nav>
   );
 }

@@ -8,10 +8,12 @@ import type { Comment } from '../types/comment.type';
 import CreateCommentPage from './CreateCommentPage';
 import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
 import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+
 function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const post = location.state?.post as Post | undefined;
+  const post = (location.state?.post as Post | undefined);
+  const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
@@ -21,8 +23,8 @@ function PostDetailPage() {
       try {
         const commentsData = await getCommentsByPostId(id!);
         setComments(commentsData);
-      } catch (err) {
-        console.error('Error cargando comentarios', err);
+      } catch (err: any) {
+        setError(err?.message ?? 'Error cargando comentarios');
       } finally {
         setLoading(false);
       }
@@ -30,46 +32,91 @@ function PostDetailPage() {
     fetchComments();
   }, [id, refresh]);
 
-  if (!post) return <div className="text-center mt-10">Post no encontrado</div>;
-  if (loading) return <div className="text-center mt-10">Cargando comentarios...</div>;
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100">
+        <Header />
+        <NavbarDefault />
+        <main className="p-6 max-w-3xl mx-auto">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+            <p className="text-red-600 dark:text-red-400">Post no encontrado</p>
+            <Link
+              to="/home"
+              className="inline-flex items-center gap-2 mt-3 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded text-white transition"
+            >
+              <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
+              Volver
+            </Link>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100">
+        <Header />
+        <NavbarDefault />
+        <main className="p-6 max-w-3xl mx-auto">
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-teal-500"></div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    <div className="text-center font-semibold text-red-600 dark:text-red-400">{error}</div>
+  }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100">
       <Header />
       <NavbarDefault />
-      <div className="p-6 max-w-3xl mx-auto bg-white rounded shadow">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold">{post.title}</h1>
+
+      <main className="p-6 max-w-3xl mx-auto">
+        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
+          <h2 className="text-xl font-bold">Detalle del Post</h2>
           <Link
             to="/home"
-            className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded text-white transition duration-300"
+            className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
           >
             <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
             Volver
           </Link>
-        </div>
+        </nav>
 
-        <p className="text-gray-700 mb-6">{post.body}</p>
+        <article className="mt-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4">
+          <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{post.title}</h3>
+          <p className="text-gray-700 dark:text-gray-300">{post.body}</p>
+        </article>
 
-        <CreateCommentPage
-          postId={post.id}
-          onCommentCreated={() => setRefresh((prev) => prev + 1)}
-        />
+        <section className="mt-6">
+          <CreateCommentPage postId={id!} onCommentCreated={() => setRefresh((prev) => prev + 1)} />
+        </section>
 
-        <h2 className="text-xl font-semibold mt-6 mb-4">Comentarios</h2>
-        {comments.length === 0 ? (
-          <p className="text-gray-500">No hay comentarios aún.</p>
-        ) : (
-          <ul className="space-y-3">
-            {comments.map((c) => (
-              <li key={c.id} className="border rounded p-3">
-                <p className="font-semibold">{c.name}</p>
-                <p className="text-gray-600">{c.body}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+        <section className="mt-6">
+          <h4 className="text-xl font-bold mb-3">Comentarios</h4>
+
+          {comments.length === 0 ? (
+            <p className="text-gray-600 dark:text-gray-300">No hay comentarios aún.</p>
+          ) : (
+            <ul className="space-y-3">
+              {comments.map((c) => (
+                <li
+                  key={c.id}
+                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                >
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">{c.name}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{c.body}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

@@ -41,10 +41,10 @@ function AccountPage() {
   if (!user) return <p className="text-center mt-10 text-red-500">No estás logueado</p>;
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 dark:text-gray-100">
       <Header />
       <div className="p-6">
-        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md">
+        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
           <h2 className="text-xl font-bold">Posts de {user.username}</h2>
           <div className="flex gap-3">
             <Link
@@ -80,18 +80,18 @@ function AccountPage() {
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
         {!loading && posts.length === 0 && (
-          <p className="text-center text-gray-600 mt-6">No tienes posts todavía.</p>
+          <p className="text-center text-gray-600 dark:text-gray-300 mt-6">No tienes posts todavía.</p>
         )}
 
         {!loading && posts.length > 0 && (
           <ul className="space-y-4 mt-6">
             {posts.map((post) => (
-              <li key={post.id} className="bg-white border rounded-lg shadow-md p-4">
+              <li key={post.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4">
                 <Link to={`/post/${post.id}`} state={{ post }}>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-teal-600">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 hover:text-teal-600">
                     {post.title}
                   </h3>
-                  <p className="text-gray-700">{post.body}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{post.body}</p>
                 </Link>
 
                 <button
