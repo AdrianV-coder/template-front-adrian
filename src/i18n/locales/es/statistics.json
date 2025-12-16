@@ -1,0 +1,12 @@
+{
+  "title": "Estadísticas",
+  "panelTitle": "Totales de la plataforma",
+  "panelSubtitle": "Cantidad de posts y comentarios.",
+  "errorLoadingStats": "Error cargando estadísticas",
+  "loadingStats": "Cargando estadísticas…",
+  "chartTitle": "Totales: Posts y Comentarios",
+  "xPosts": "Posts",
+  "xComments": "Comentarios",
+  "yTitle": "Cantidad",
+  "chartDescription": "Gráfico de barras con totales de posts y comentarios"
+}

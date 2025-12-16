@@ -8,6 +8,7 @@ import type { Comment } from '../types/comment.type';
 import CreateCommentPage from './CreateCommentPage';
 import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
 import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import { useTranslation } from 'react-i18next';
 
 function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,7 @@ function PostDetailPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
+  const { t } = useTranslation(['postDetail', 'common']);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -39,13 +41,13 @@ function PostDetailPage() {
         <NavbarDefault />
         <main className="p-6 max-w-3xl mx-auto">
           <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-            <p className="text-red-600 dark:text-red-400">Post no encontrado</p>
+            <p className="text-red-600 dark:text-red-400">{t('postNotFound')}</p>
             <Link
               to="/home"
               className="inline-flex items-center gap-2 mt-3 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded text-white transition"
             >
               <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
-              Volver
+              {t('back', { ns: 'common' })}
             </Link>
           </div>
         </main>
@@ -67,9 +69,7 @@ function PostDetailPage() {
     );
   }
 
-  if (error) {
-    <div className="text-center font-semibold text-red-600 dark:text-red-400">{error}</div>
-  }
+  if (error) <div className="text-center font-semibold text-red-600 dark:text-red-400">{error}</div>
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100">
@@ -78,13 +78,13 @@ function PostDetailPage() {
 
       <main className="p-6 max-w-3xl mx-auto">
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center rounded-md shadow-md dark:bg-gray-900">
-          <h2 className="text-xl font-bold">Detalle del Post</h2>
+          <h2 className="text-xl font-bold">{t('postDetail')}</h2>
           <Link
             to="/home"
             className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
           >
             <XVIcon icon={FontAwesomeIconsLibrary.ArrowLeft} />
-            Volver
+            {t('back', { ns: 'common' })}
           </Link>
         </nav>
 
@@ -98,10 +98,10 @@ function PostDetailPage() {
         </section>
 
         <section className="mt-6">
-          <h4 className="text-xl font-bold mb-3">Comentarios</h4>
+          <h4 className="text-xl font-bold mb-3">{t('comments')}</h4>
 
           {comments.length === 0 ? (
-            <p className="text-gray-600 dark:text-gray-300">No hay comentarios aún.</p>
+            <p className="text-gray-600 dark:text-gray-300">{t('noComments')}</p>
           ) : (
             <ul className="space-y-3">
               {comments.map((c) => (

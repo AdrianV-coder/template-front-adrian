@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { createComment } from '../services/apiService';
 import { ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import type { RootState } from '../store/index';
+import { useTranslation } from 'react-i18next';
 
 interface CreateCommentProps {
   postId: string;
@@ -14,6 +15,7 @@ function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
   const [isActive, setIsActive] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [sending, setSending] = useState(false);
+  const { t } = useTranslation('comments');
 
   const handleSendComment = async () => {
     if (!commentText.trim() || !user) return;
@@ -32,9 +34,9 @@ function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
 
       if (onCommentCreated) onCommentCreated();
 
-      alert('Comentario creado con éxito');
+      alert(t('createdOk'));
     } catch {
-      alert('Error al crear el comentario');
+      alert(t('createdFail'));
     } finally {
       setSending(false);
     }
@@ -45,7 +47,7 @@ function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
       {isActive ? (
         <div className="space-y-3">
           <textarea
-            placeholder="Escribe tu comentario..."
+            placeholder={t('textareaPlaceholder')}
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -56,7 +58,7 @@ function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
               className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded transition"
               disabled={sending}
             >
-              Cancelar
+              {t('cancel')}
             </button>
             <button
               onClick={handleSendComment}
@@ -68,7 +70,7 @@ function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
               ) : (
                 <>
                   <PaperAirplaneIcon className="h-5 w-5" />
-                  Enviar
+                  {t('send')}
                 </>
               )}
             </button>
@@ -81,7 +83,7 @@ function CreateCommentPage({ postId, onCommentCreated }: CreateCommentProps) {
             className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded text-white transition duration-300 ease-in-out"
           >
             <ChatBubbleLeftRightIcon className="h-5 w-5" />
-            Crear Comentario
+            {t('createButton')}
           </button>
         </div>
       )}

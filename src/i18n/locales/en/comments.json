@@ -1,0 +1,8 @@
+{
+  "textareaPlaceholder": "Write your comment...",
+  "cancel": "Cancel",
+  "send": "Send",
+  "createButton": "Create Comment",
+  "createdOk": "Comment created successfully",
+  "createdFail": "Error creating the comment"
+}

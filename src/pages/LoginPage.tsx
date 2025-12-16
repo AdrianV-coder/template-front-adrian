@@ -5,6 +5,7 @@ import { loginUser } from '../store/userSlice';
 import { login as authLogin } from '../store/authSlice';
 import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
 import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
+import { useTranslation } from 'react-i18next';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function LoginPage() {
   const { user, loading, error } = useAppSelector((state) => state.user);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { t } = useTranslation('auth');
 
   useEffect(() => {
     if (user) navigate('/home');
@@ -26,32 +28,38 @@ function LoginPage() {
 
       navigate('/home', { replace: true });
     } catch {
-      alert('No se pudo iniciar sesión');
+      alert(t('login.cannotLogin'));
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded-xl shadow-lg w-96">
-        <h2 className="text-3xl font-bold text-teal-600 mb-2 text-center">Iniciar Sesión</h2>
-        <p className="text-gray-500 text-center mb-6">Bienvenido de nuevo</p>
+    
+<div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100 flex items-center justify-center p-6">
+    <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+      <h2 className="text-2xl font-bold text-teal-600 mb-1">{t('login.title')}</h2>
+      <p className="text-gray-600 dark:text-gray-300 mb-4">{t('login.subtitle')}</p>
 
-        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+      {error && (
+        <div className="mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
+          {error}
+        </div>
+      )}
 
+      <form onSubmit={handleLogin}>
         <input
           type="text"
-          placeholder="Usuario"
+          placeholder={t('login.usernamePlaceholder')}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="border rounded-md p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+          required
         />
-
         <input
           type="password"
-          placeholder="Contraseña"
+          placeholder={t('login.passwordPlaceholder')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border rounded-md p-3 w-full mb-6 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="border rounded-md p-3 w-full mb-6 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
         />
 
         <button
@@ -64,19 +72,21 @@ function LoginPage() {
           ) : (
             <>
               <XVIcon icon={FontAwesomeIconsLibrary.ArrowRight} />
-              Iniciar Sesión
+              {t('login.submit')}
             </>
           )}
         </button>
-
-        <p className="text-center mt-4 text-gray-600">
-          ¿No tienes cuenta?{' '}
-          <Link to="/register" className="text-teal-600 hover:underline">
-            Regístrate
-          </Link>
-        </p>
       </form>
+
+      <div className="mt-4 text-center text-gray-700 dark:text-gray-300">
+        {t('login.noAccount')}{' '}
+        <Link to="/register" className="text-teal-600 hover:text-teal-700 font-medium">
+          {t('login.register')}
+        </Link>
+           </div>
     </div>
+  </div>
+
   );
 }
 

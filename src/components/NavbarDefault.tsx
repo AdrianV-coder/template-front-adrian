@@ -6,6 +6,7 @@ import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
 import { logout as authLogout } from '../store/authSlice';
 import { logout as userLogout } from '../store/userSlice';
 import type { AppDispatch } from '../store/index';
+import { useTranslation } from 'react-i18next';
 
 export function NavbarDefault() {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,6 +14,7 @@ export function NavbarDefault() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
       return localStorage.getItem("data-theme") === "dark";
   });
+  const { t, i18n } = useTranslation(['navbar', 'common']);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -34,15 +36,30 @@ export function NavbarDefault() {
 
   return (
     <nav className="bg-gray-800 text-white px-6 py-4 flex justify-between items-center shadow-md">
-      <h2 className="text-xl font-bold hover:text-teal-400 transition">Mi Red Social</h2>
+      <h2 className="text-xl font-bold hover:text-teal-400 transition">{t('appName', { ns: 'common' })}</h2>
 
       <div className="flex gap-4 items-center">
+        <div className="flex gap-2">
+          <button
+            onClick={() => void i18n.changeLanguage('es')}
+            className={`px-3 py-1 rounded ${i18n.language === 'es' ? 'bg-teal-600 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
+          >
+            ES
+          </button>
+          <button
+            onClick={() => void i18n.changeLanguage('en')}
+            className={`px-3 py-1 rounded ${i18n.language === 'en' ? 'bg-teal-600 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
+          >
+            EN
+          </button>
+        </div>
+
         <Link
           to="/create-post"
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
           <XVIcon icon={FontAwesomeIconsLibrary.Plus} />
-          Crear Post
+          {t('createPost')}
         </Link>
 
         <Link
@@ -50,7 +67,7 @@ export function NavbarDefault() {
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
           <XVIcon icon={FontAwesomeIconsLibrary.ChartLine} />
-          Statistics
+          {t('statistics')}
         </Link>
 
         <Link
@@ -58,7 +75,7 @@ export function NavbarDefault() {
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
         >
           <XVIcon icon={FontAwesomeIconsLibrary.User} />
-          Account
+          {t('account')}
         </Link>
       </div>
 
@@ -66,10 +83,10 @@ export function NavbarDefault() {
         <button
           onClick={() => setIsDarkMode(prev => !prev)}
           className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded transition duration-300"
-          title={isDarkMode ? 'Cambiar a modo día' : 'Cambiar a modo noche'}
+          title={isDarkMode ? t('themeDay') : t('themeNight')}
         >
           <XVIcon icon={isDarkMode ? FontAwesomeIconsLibrary.CircleRegular : FontAwesomeIconsLibrary.LightbulbOn} />
-          {isDarkMode ? 'Noche' : 'Día'}
+          {isDarkMode ? t('themeDay') : t('themeNight')}
         </button>
 
         <button
@@ -77,7 +94,7 @@ export function NavbarDefault() {
           className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
         >
           <XVIcon icon={FontAwesomeIconsLibrary.RightFromBracket} />
-          Cerrar sesión
+          {t('logout')}
         </button>
       </div>
     </nav>

@@ -1,0 +1,15 @@
+
+{
+  "title": "Estadísticas",
+  "panelTitle": "Estadísticas personales",
+  "panelSubtitle": "Cantidad de posts y comentarios de tu cuenta.",
+  "errorLoadingStats": "Error cargando estadísticas",
+  "loadingStats": "Cargando estadísticas…",
+  "chartTitle": "Actividad personal de {{username}}",
+  "chartSubtitle": "Posts propios y comentarios (recibidos vs. escritos)",
+  "xPosts": "Posts",
+  "xReceived": "Comentarios recibidos",
+  "xWritten": "Comentarios escritos",
+  "yTitle": "Cantidad",
+  "chartDescription": "Gráfico de barras con el recuento de posts del usuario y sus comentarios recibidos y escritos."
+}
