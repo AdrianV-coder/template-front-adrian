@@ -36,11 +36,11 @@ function LoginPage() {
     
 <div className="min-h-screen bg-gray-100 dark:bg-gray-950 dark:text-gray-100 flex items-center justify-center p-6">
     <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-teal-600 mb-1">{t('login.title')}</h2>
+      <h2 data-testid="login-text" className="text-2xl font-bold text-teal-600 mb-1">{t('login.title')}</h2>
       <p className="text-gray-600 dark:text-gray-300 mb-4">{t('login.subtitle')}</p>
 
       {error && (
-        <div className="mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
+        <div data-testid="error-login-text" className="mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
           {error}
         </div>
       )}

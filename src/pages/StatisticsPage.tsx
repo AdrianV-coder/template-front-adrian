@@ -18,6 +18,10 @@ function StatisticsPage() {
   const [commentsCount, setCommentsCount] = useState<number>(0);
   const { t } = useTranslation(['statistics', 'common']);
 
+  const [isDark] = useState(() => {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  });
+
   if (typeof HighchartsAccessibility === 'function') {
     HighchartsAccessibility(Highcharts);
   }
@@ -43,10 +47,10 @@ function StatisticsPage() {
   }, [t]);
   
   const totalsOptions: Highcharts.Options = {
-    chart: { type: 'bar' },
-    title: { text: t('chartTitle') },
-    xAxis: { categories: [t('xPosts'), t('xComments')] },
-    yAxis: { min: 0, title: { text: t('yTitle') } },
+    chart: { type: 'bar', backgroundColor: isDark ? '#1f2937' : '#ffffff' },
+    title: { text: t('chartTitle'), style: { color: isDark ? '#e5e7eb' : '#1f2937' } },
+    xAxis: { categories: [t('xPosts'), t('xComments')], labels: { style: { color: isDark ? '#e5e7eb' : '#1f2937' } } },
+    yAxis: { min: 0, title: { text: t('yTitle') }, labels: { style: { color: isDark ? '#e5e7eb' : '#1f2937' } } },
     series: [
         {
           name: 'Cantidad',
@@ -55,7 +59,7 @@ function StatisticsPage() {
           colorByPoint: true,
         },
     ],
-    colors: ['#14b8a6', '#6366f1'],
+    colors: isDark ? ['#22d3ee', '#a5b4fc'] : ['#14b8a6', '#6366f1'],
     credits: { enabled: false },
     legend: { enabled: false },
     accessibility: {
