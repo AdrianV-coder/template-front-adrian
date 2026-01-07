@@ -28,7 +28,7 @@ function RegisterPage() {
 
       dispatch(login({ id: newUser.id, username: newUser.username }));
 
-      navigate("/login", { replace: true });
+      navigate("/", { replace: true });
     } catch {
       setError(t('register.cannotRegister'));
     } finally {
@@ -43,7 +43,7 @@ function RegisterPage() {
         <p className="text-gray-600 dark:text-gray-300 mb-4">{t('register.subtitle')}</p>
 
         {error && (
-          <div className="mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
+          <div data-testid="error-register-text" className="mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
             {error}
           </div>
         )}

@@ -50,6 +50,7 @@ function AccountPage() {
           <h2 className="text-xl font-bold">{t('title', { username: user.username })}</h2>
           <div className="flex gap-3">
             <Link
+              data-testid="personal-statistics-button"
               to="/personalStatistics"
               className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded transition duration-300"
             >

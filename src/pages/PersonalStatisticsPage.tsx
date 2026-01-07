@@ -8,7 +8,7 @@ import { FontAwesomeIconsLibrary } from "@goaigua/goaigua-styles";
 import { XVIcon } from "@goaigua/xylem-vue-components/components/icon";
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
-import { getPostsByUsername, getComments } from '../services/apiService';
+import { getPostsByUsername, getComments, getCommentsByPostId } from '../services/apiService';
 import type { Post } from '../types/post.type';
 import type { Comment } from '../types/comment.type';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +21,10 @@ function PersonalStatisticsPage() {
   const [commentsReceivedCount, setCommentsReceivedCount] = useState<number>(0);
   const [commentsWrittenCount, setCommentsWrittenCount] = useState<number>(0);
   const { t } = useTranslation(['personalStatistics', 'common']);
+
+  const [isDark] = useState(() => {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  });
 
   if (typeof HighchartsAccessibility === 'function') {
     HighchartsAccessibility(Highcharts);
@@ -42,9 +46,12 @@ function PersonalStatisticsPage() {
         setPostsCount(posts.length);
 
         const allComments: Comment[] = await getComments();
-
-        const userPostIds = new Set(posts.map(p => p.id));
-        const received = allComments.filter(c => userPostIds.has(c.postId));
+        
+        const received: Comment[] = [];
+        for (const p of posts) {
+          const postComments = await getCommentsByPostId(p.id);
+          received.push(...postComments);
+        }
         setCommentsReceivedCount(received.length);
 
         const written = allComments.filter(c => c.userId === user.id);
@@ -60,17 +67,19 @@ function PersonalStatisticsPage() {
   }, [user, t]);
 
   const chartOptions: Highcharts.Options = {
-    chart: { type: 'bar' },
-    title: { text: t('chartTitle', { username: user?.username ?? '' }) },
+    chart: { type: 'bar', backgroundColor: isDark ? '#1f2937' : '#ffffff' },
+    title: { text: t('chartTitle', { username: user?.username ?? '' }), style: { color: isDark ? '#e5e7eb' : '#1f2937' } },
     subtitle: { text: t('chartSubtitle') },
     xAxis: {
       categories: [t('xPosts'), t('xReceived'), t('xWritten')],
       title: { text: undefined },
+      labels: { style: { color: isDark ? '#e5e7eb' : '#1f2937' } },
     },
     yAxis: {
       min: 0,
       title: { text: t('yTitle') },
       allowDecimals: false,
+      labels: { style: { color: isDark ? '#e5e7eb' : '#1f2937' } },
     },
     tooltip: {
       pointFormat: '<b>{point.y}</b>',

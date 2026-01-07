@@ -86,10 +86,11 @@ export function NavbarDefault() {
           title={isDarkMode ? t('themeDay') : t('themeNight')}
         >
           <XVIcon icon={isDarkMode ? FontAwesomeIconsLibrary.CircleRegular : FontAwesomeIconsLibrary.LightbulbOn} />
-          {isDarkMode ? t('themeDay') : t('themeNight')}
+          {isDarkMode ? t('themeNight') : t('themeDay')}
         </button>
 
         <button
+          data-testid="log-out-button"
           onClick={handleLogout}
           className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded transition duration-300"
         >
